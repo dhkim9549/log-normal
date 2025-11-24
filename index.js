@@ -27,7 +27,7 @@ function calculateAverage(arr) {
 async function main() {
   let c = [];
 
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 31; i++) {
     let obj = {};
     obj.id = i;
     obj.val = 1.0;
@@ -38,25 +38,22 @@ async function main() {
 
   console.log({ c });
 
-  for (let i = 0; i < 10000000000000; i++) {
+  for (let i = 0; true; i++) {
     c = c.map((e) => {
       let r = Math.random();
 
-      let sigma = 0.01;
-      let mu = 0.00005;
+      let s = 1.001;
 
       if (r >= 0.5) {
-        e.val += e.val * mu + e.val * sigma;
+        e.val *= s;
       } else {
-        e.val += e.val * mu - e.val * sigma;
+        e.val /= s;
       }
 
       return e;
     });
 
     if (i % 4000000 == 0) {
-      c = c.filter((e) => e.val > Math.pow(1.0, 0.0));
-
       let c2 = c.slice();
       c2.sort((a, b) => b.val - a.val);
       c = c2;
@@ -64,16 +61,17 @@ async function main() {
       let cVal = c.map((e) => e.val);
       let max = Math.max(...cVal);
       let min = Math.min(...cVal);
-      let max2 = c2[1];
+      let [max1, max2] = [c2[0], c2[1]];
       let mid = calculateMedian(cVal);
       let avg = calculateAverage(cVal);
+      let c_length = c.length;
 
-      let cT = c.slice(0, 10);
+      console.log({ c, max1, max2, avg, mid, min, c_length, cL, i });
+      // await new Promise((r) => setTimeout(r, 2000));
 
-      console.log({ c, max, max2, avg, mid, min });
-      //       await new Promise((r) => setTimeout(r, 2000));
+      c = c.filter((e) => e.val > Math.pow(10, -1));
 
-      for (let i = 0; i < 5; i++) {
+      while (c.length < 31) {
         let obj = {};
         obj.id = cL++;
         obj.val = 1.0;
